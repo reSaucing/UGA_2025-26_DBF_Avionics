@@ -84,6 +84,9 @@ void setup() {
   Wire.write(BMP_OSR_REG);
   Wire.write(0b00000010); //sets pressure oversample resolution to standard 
   Wire.endTransmission();
+
+  //initialize BNO085
+  
 }
 
 void loop() {
