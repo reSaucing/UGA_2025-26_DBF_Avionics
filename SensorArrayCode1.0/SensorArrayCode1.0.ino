@@ -38,7 +38,7 @@ struct barometricData{uint8_t lsb, msb, xlsb;}; //3 unsigned bytes storing least
 struct gameVectoingData{int16_t i, j, k, w;}; //4 signed 2-byte datastruct for i, j, k, and w imu vectoring
 struct gpsLocation{int32_t lat, lon, alt;}; //3 long ints to store lat long and altitude
 
-//.bin file data entry 
+//complete data entry configured in set order
 struct completeLogEntry{
   uint32_t timestamp_ms;  //timestamp in milliseconds
   gameVectoringData currentVector;
@@ -48,7 +48,7 @@ struct completeLogEntry{
 }
 /*------------------------------------------End of Configs----------------------------------------------*/
 
-char fileName[16];
+char fileName[16];  //stores filename for logged data
 volatile bool writeReady=false;
 
 void dataReady(){
