@@ -80,7 +80,7 @@ barometricData getBaroData() {
   Wire.endTransmission();
   Wire.requestFrom(BMP_ADDRESS, 3);                    //requesting sensor to write 3 bytes of data at prevously indicated address
   if (Wire.available() >= 3) {                         //if received all 3 bytes
-    return { Wire.read(), Wire.read(), Wire.read() };  // assigns lsb msb and xlsb and exits from function
+    return { (uint8_t)Wire.read(), (uint8_t)Wire.read(), (uint8_t)Wire.read() };  // assigns lsb msb and xlsb and exits from function. added explicit casting to silence compilation warnings
   }
   return { 0, 0, 0 };  //records 0 as reading to indicate error obtaining data when processing data. exits function
 }
@@ -218,7 +218,7 @@ void setup() {
   packet[3] = 0;
   packet[4] = 0xFC;
   packet[5] = SHTP_GAME_ROTATION_VECTOR_ID;
-  for (int i = a6; i < 9; i++) packet[i] = 0;
+  for (int i = 6; i < 9; i++) packet[i] = 0;
   packet[9] = interval_us & 0xFF;
   packet[10] = (interval_us >> 8) & 0xFF;
   packet[11] = (interval_us >> 16) & 0xFF;
