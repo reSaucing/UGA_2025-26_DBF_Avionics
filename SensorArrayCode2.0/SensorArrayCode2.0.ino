@@ -5,12 +5,11 @@
 // =================================================================================
 // Pin Definitions & I2C Addresses
 // =================================================================================
-const int BNO_RST_PIN = 8;
+
 const int BMP_ADDRESS = 0x77;   // Barometric Pressure Sensor
 const int ASPD_ADDRESS = 0x28;  // Airspeed Sensor
 const byte BMP_DATA_STRT_REG = 0x04;  // Start of pressure data for BMP sensor
 
-// Per the working example, setting RESET to -1 for the library is key for I2C.
 #define BNO08X_RESET -1
 
 // =================================================================================
@@ -63,7 +62,7 @@ void setup() {
     while (1);
   }
   
-  // Optional check for airspeed sensor, does not halt on failure
+  // Optional check for airspeed sensor, does not stop on failure
   Wire.beginTransmission(ASPD_ADDRESS);
   if (Wire.endTransmission() == 0) {
     Serial.println("Airspeed sensor found on I2C bus.");
@@ -97,19 +96,18 @@ void loop() {
       current_log.imu_reading.k    = sensorValue.un.gameRotationVector.k;
       current_log.imu_reading.real = sensorValue.un.gameRotationVector.real;
 
-      // MODIFIED: The binary write command is now commented out.
       // Serial.write((byte*)&current_log, sizeof(current_log));
-
-      // MODIFIED: Added human-readable print statements for debugging.
+      Serial.print(sizeof(current_log));
+      // Added human friendly print statements for debugging.
       long raw_pressure = (long)current_log.baro_reading.xlsb << 16 | (long)current_log.baro_reading.msb << 8 | (long)current_log.baro_reading.lsb;
       
-      Serial.println("--------------------");
+      Serial.println(" bytes--------------------");
       Serial.print("Timestamp: "); Serial.println(current_log.timestamp_ms);
       Serial.print("IMU (Raw): i=");
-      Serial.print(current_log.imu_reading.i); Serial.print(", j=");
-      Serial.print(current_log.imu_reading.j); Serial.print(", k=");
-      Serial.print(current_log.imu_reading.k); Serial.print(", real=");
-      Serial.println(current_log.imu_reading.real);
+      Serial.print(sensorValue.un.gameRotationVector.i); Serial.print(", j=");
+      Serial.print(sensorValue.un.gameRotationVector.j); Serial.print(", k=");
+      Serial.print(sensorValue.un.gameRotationVector.k); Serial.print(", real=");
+      Serial.println(sensorValue.un.gameRotationVector.real);
       Serial.print("Barometer (Raw): "); Serial.println(raw_pressure);
       Serial.print("Airspeed (Raw): "); Serial.println(current_log.airspeed_reading.pressure);
     }
