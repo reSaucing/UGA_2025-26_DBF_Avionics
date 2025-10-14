@@ -28,7 +28,7 @@ void loop() {
 
     Serial.print("Timestamp: ");
     Serial.print(millis());
-    Serial.print(" ms, Raw Pressure: ");
+    Serial.print(" ms, Pressure: ");
     Serial.println(pressure);
 
   } else {

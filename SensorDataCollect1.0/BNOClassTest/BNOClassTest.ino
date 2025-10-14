@@ -38,7 +38,7 @@ void loop() {
     Serial.print(k);
     Serial.print(", real=");
     Serial.println(real);
-  }
+  }else Serial.println("Failed to get reading.")
   
   delay(100);
 }
