@@ -7,7 +7,7 @@ SD_Data_Read myReader;
 
 // Specify the name of the file you want to read.
 // Make sure this matches a file that was created by your writer sketch.
-const char* FILENAME_TO_READ = "flight000.bin";//"flight000.bin";
+const char* FILENAME_TO_READ = "flight001.bin";//"flight000.bin";
 
 void setup() {
   Serial.begin(115200);
@@ -54,5 +54,5 @@ void loop() {
   }
   myReader.deleteFile(FILENAME_TO_READ);
 
-  delay(100); // Read entries at a controlled pace
+  delay(10); // Read entries at a controlled pace
 }
