@@ -1,4 +1,4 @@
-#include "ASPD_Data_Collect.h"
+/*#include "ASPD_Data_Collect.h"
 #include <Wire.h>
 #include <SD.h>
 
@@ -12,7 +12,7 @@ File myFile;
 /**
  * Helper function to delete old log file.
  */
-void deleteBinFiles(File dir) {
+/*void deleteBinFiles(File dir) {
   while (File entry = dir.openNextFile()) {
     String entryName = entry.name();
     if (entryName.endsWith(".bin")) {
@@ -79,3 +79,4 @@ void loop() {
   }
   delay(1000);
 }
+*/
