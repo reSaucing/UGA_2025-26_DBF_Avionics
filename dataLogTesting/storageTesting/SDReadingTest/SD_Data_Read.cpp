@@ -12,6 +12,26 @@ bool SD_Data_Read::initSD() {
   if (!SD.begin(10)) return false;
   return true;
 }
+bool SD_Data_Read::openLogFile(const char* filename) {
+  myFile = SD.open(filename, FILE_READ);
+  if (myFile) return true;
+  return false; // Failed to open file
+}
+bool SD_Data_Read::readNextEntry(testData &data) {
+  if (!myFile) return false;
+  int bytesRead = myFile.read((uint8_t *)&data, sizeof(data));
+  if (bytesRead == sizeof(data)) return true;
+  return false;
+}
+bool SD_Data_Read::deleteFile(const char* filename){
+
+  Serial.print("Deleting File: ");
+  Serial.print(filename);
+
+  if(SD.remove(filename)) return true;
+  return false;
+}
+
 void SD_Data_Read::listFiles() {
   Serial.println("\nFiles found on SD card:");
   File root = SD.open("/");
@@ -23,17 +43,6 @@ void SD_Data_Read::listFiles() {
     entry.close();
   }
   root.close();
-}
-bool SD_Data_Read::openLogFile(const char* filename) {
-  myFile = SD.open(filename, FILE_READ);
-  if (myFile) return true;
-  return false; // Failed to open file
-}
-bool SD_Data_Read::readNextEntry(testData &data) {
-  if (!myFile) return false;
-  int bytesRead = myFile.read((uint8_t *)&data, sizeof(data));
-  if (bytesRead == sizeof(data)) return true;
-  return false;
 }
 void SD_Data_Read::closeLogFile() {
   if (myFile) {

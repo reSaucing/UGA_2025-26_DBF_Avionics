@@ -7,7 +7,7 @@ SD_Data_Read myReader;
 
 // Specify the name of the file you want to read.
 // Make sure this matches a file that was created by your writer sketch.
-const char* FILENAME_TO_READ = "flight000.bin";
+const char* FILENAME_TO_READ = "airspeedSensorLog.txt";//"flight000.bin";
 
 void setup() {
   Serial.begin(115200);
@@ -52,6 +52,7 @@ void loop() {
     myReader.closeLogFile();
     while (1); // Halt the program, the test is complete.
   }
+  myReader.deleteFile(FILENAME_TO_READ);
 
   delay(100); // Read entries at a controlled pace
 }

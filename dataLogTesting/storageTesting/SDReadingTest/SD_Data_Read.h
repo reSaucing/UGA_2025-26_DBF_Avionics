@@ -16,6 +16,7 @@ class SD_Data_Read {
   bool openLogFile(const char* filename);
   bool readNextEntry(testData &data);
   void closeLogFile();
+  bool deleteFile(const char* filename);
 
  private:
   File myFile;
