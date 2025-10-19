@@ -3,7 +3,7 @@
 
 #include <Adafruit_BNO08x.h>
 
-struct qVectors{ int16_t i, j, k, real;};
+struct qVectors{ float i, j, k, real;};
 
 class BNO_Data_Collect{
   public:
@@ -15,6 +15,6 @@ class BNO_Data_Collect{
     Adafruit_BNO08x bno085;
     sh2_SensorValue_t sensorOutputData;
 
-    void setReports();
+    void setBNOReports(void);
 };
 #endif

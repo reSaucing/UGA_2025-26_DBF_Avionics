@@ -73,7 +73,7 @@ void loop() {
     // write sensor readings to log file
     currentAirspeed.timestamp_ms = millis();
 
-    myFile.print(currentAirspeed);
+    myFile.println(currentAirspeed);
     myFile.flush();
     
   }

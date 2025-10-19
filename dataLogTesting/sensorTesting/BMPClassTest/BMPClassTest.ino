@@ -24,7 +24,7 @@ void loop() {
 
   if(myBMP.getPressure(currentPressure)){
 
-    float pressure=(long)currentPressure.xlsb<<16|(long)currentPressure.msb<<8|(long)currentPressure.lsb;
+    long pressure=currentPressure.xlsb<<16|currentPressure.msb<<8|currentPressure.lsb;
 
     Serial.print("Timestamp: ");
     Serial.print(millis());

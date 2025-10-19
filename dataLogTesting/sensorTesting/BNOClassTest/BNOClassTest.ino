@@ -7,12 +7,13 @@ void setup() {
   while (!Serial);
 
   Serial.println("\nBNO Test");
-  Wire.begin();
 
   if (!myBno.initBNO()) {
     Serial.println("Failed to init BNO085");
     while (1);
   }
+
+  Wire.begin();
 
   Serial.println("BNO085 initialized successfully.");
 }
@@ -23,23 +24,18 @@ void loop() {
 
   if (myBno.getVectors(currentVectors)) {
 
-    float i=(float)currentVectors.i/16384.0;
-    float j=(float)currentVectors.j/16384.0;
-    float k=(float)currentVectors.k/16384.0;
-    float real=(float)currentVectors.real/16384.0;
-
     Serial.print("Timestamp: ");
     Serial.print(millis());
     Serial.print(" ms, IMU (Raw): i=");
-    Serial.print(i);
+    Serial.print(currentVectors.i);
     Serial.print(", j=");
-    Serial.print(j);
+    Serial.print(currentVectors.j);
     Serial.print(", k=");
-    Serial.print(k);
+    Serial.print(currentVectors.k);
     Serial.print(", real=");
-    Serial.println(real);
-  }else Serial.println("Failed to get reading.")
+    Serial.println(currentVectors.real);
+  }
   
-  delay(100);
+  delay(10);
 }
 
