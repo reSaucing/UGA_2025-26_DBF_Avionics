@@ -2,10 +2,7 @@
 #define ASPD_Data_Collect_h
 #include <stdint.h>
 
-struct airSpeed{ 
-  uint32_t timestamp_ms;
-  int16_t air;
-};
+struct airSpeed{int16_t air;};
 
 class ASPD_Data_Collect{
   public:
