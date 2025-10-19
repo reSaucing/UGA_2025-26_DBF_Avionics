@@ -11,16 +11,22 @@ BNO_Data_Collect myBNO;
 //initializing sd card object with the following name
 SD_Data_Write mySD;
 
+struct POTValues{uint16_t leftPOT, rightPOT;};
+
 //initializing main logging struct with corresponding sensor structs
 struct masterLog{
   uint32_t timestamp_ms;
   qVectors imuData;
   BaroPressure baroData;
   airSpeed airspeedData;
+  POTValues potData;
 };
 
 //file name storage string
 char fileName[16];
+
+const int leftPotPin=20;
+const int rightPotPin=21;
 
 void setup() {
   Serial.begin(115200);
@@ -82,6 +88,9 @@ void loop() {
 
     if(!myBMP.getPressure(currentLog.baroData)) currentLog.baroData={};  //populates pressure data. if unable data = 0;
     if(!myASPD.getAirspeed(currentLog.airspeedData)) currentLog.airspeedData={}; //populates airspeed data. if unable data = 0;
+
+    currentLog.potData.leftPOT=analogRead(leftPotPin);
+    currentLog.potData.rightPOT=analogRead(leftPotPin);
 
     //writes the contents of the struct to the datalog in 8 bit intervals (1 byte interval)
     File dataFile = SD.open(fileName, FILE_WRITE);  //opens log file
