@@ -1,4 +1,4 @@
-/*#include "ASPD_Data_Collect.h"
+#include "ASPD_Data_Collect.h"
 #include <Wire.h>
 #include <SD.h>
 
@@ -7,33 +7,12 @@ ASPD_Data_Collect myASPD;
 const int ASPD_ADDRESS = 0x28;
 const int chipSelect = 10;
 
-File myFile;
-
-/**
- * Helper function to delete old log file.
- */
-/*void deleteBinFiles(File dir) {
-  while (File entry = dir.openNextFile()) {
-    String entryName = entry.name();
-    if (entryName.endsWith(".bin")) {
-      entry.close();
-        if (SD.remove(entryName.c_str())) {
-          Serial.print("Removed: ");
-          Serial.println(entryName);
-        } else {
-          Serial.print("Failed to remove: ");
-          Serial.println(entryName);
-        }
-    }
-  }
-}
-
 void setup() {
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   while(!Serial);
 
-  Serial.print("\nASPD test");
+  Serial.println("\nASPD test");
   Wire.begin();
 
   if(!myASPD.initASPD()){
@@ -41,20 +20,21 @@ void setup() {
     while(1);
   }
 
+  pinMode(10, OUTPUT);
   if (!SD.begin(chipSelect)) {
     Serial.println("SD card init failed");
     while (1);
   }
 
-  // clear old logs
-  File root = SD.open("/");
-  deleteBinFiles(root);
-  root.close();
-
-  // create new log file
-  myFile = SD.open("airspeedSensorLog.bin", FILE_WRITE);
-
   Serial.println("ASPD init successfully.");
+
+  //test opening file on SD
+  File myFile = SD.open(myASPD.fileName, FILE_WRITE);
+  if (!myFile) {
+    Serial.println("Could not open file. Halting");
+    while (1);
+  }
+  myFile.close();
 }
 
 void loop() {
@@ -73,10 +53,10 @@ void loop() {
     // write sensor readings to log file
     currentAirspeed.timestamp_ms = millis();
 
-    myFile.println(currentAirspeed);
-    myFile.flush();
+    myASPD.writetoSD(currentAirspeed);
     
+  } else {
+    Serial.println("Error getting airspeed reading");
   }
   delay(1000);
 }
-*/

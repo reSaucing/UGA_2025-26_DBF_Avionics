@@ -1,7 +1,10 @@
 #include "ASPD_Data_Collect.h"
 #include <Wire.h>
+#include <SD.h>
 
 const int ASPD_ADDRESS= 0x28;
+
+const char filename[] = "aspdlog.bin";
 
 ASPD_Data_Collect::ASPD_Data_Collect(){
 //class constructor
@@ -23,4 +26,14 @@ bool ASPD_Data_Collect::getAirspeed(airSpeed &data){
     return true;
   }
   return false; //returns false if unsuccessful
+}
+
+bool ASPD_Data_Collect::writetoSD(airSpeed &data){
+  File myFile = SD.open(fileName, FILE_WRITE);
+    if (myFile) {
+      myFile.write((const uint8_t *)&data, sizeof(data));
+      myFile.close();
+      return true; // Success
+    }
+    return false; // Failed to open the file
 }

@@ -1,4 +1,4 @@
-#include "ASPD_Data_Collect.h"
+/*#include "ASPD_Data_Collect.h"
 #include <Wire.h>
 
 // Create an instance of your new class.
@@ -45,4 +45,4 @@ void loop() {
 
   delay(1000); // Sample once per second.
 }
-
+*/
