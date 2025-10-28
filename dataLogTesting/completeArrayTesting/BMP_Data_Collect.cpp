@@ -40,19 +40,8 @@ bool BMP_Data_Collect::initBMP(){
 bool BMP_Data_Collect::getPressure(BaroPressure &data){
 //obtaines barometric pressure reading from sensor. returns true if successful, false if error was encountered while obtaining data
     if(!bmp390.performReading()) return false;  //returns false if sensor does not acknowlege the command to preform a data reading
-
-    Wire.beginTransmission(BMP_ADDRESS);    //start i2c communication to sensor
-    Wire.write(BMP_DATA_REG);   //request the sensor to transmit the data from the pressure register
-    if(Wire.endTransmission(false)!=0) return false;    //dont stop communication yet. if coms is closed or does not respond, return false to indicate error
-
-    if(Wire.requestFrom(BMP_ADDRESS,3)==3){ // tells the sensor to sent 3 bytes. if we detect 3 bytes, we place them in correct struct component
-        data.lsb= Wire.read();  //least sig byte
-        data.msb= Wire.read();  //middle byte
-        data.xlsb=Wire.read();  //most sig byte
-        return true;
-    }
-
-    return false;   //if 3 bytes are not received, return false to indicate error
+    data.pressure=bmp390.pressure;  //sets local struct value to bmp390 compensated double integer value
+    return true;
 }
 uint8_t BMP_Data_Collect::convertInputSampleRate(int freqRateToConvert){
 //converts the optional constructor sample rate setting option to a bmp readable output

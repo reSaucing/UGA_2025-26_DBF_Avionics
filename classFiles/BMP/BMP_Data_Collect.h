@@ -3,7 +3,7 @@
 
 #include <Adafruit_BMP3XX.h>
 
-struct BaroPressure{ uint8_t lsb, msb, xlsb;};
+struct BaroPressure{ double pressure;};
 
 class BMP_Data_Collect{
     public:

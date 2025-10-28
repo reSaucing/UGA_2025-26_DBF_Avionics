@@ -62,8 +62,7 @@ void loop() {
           Serial.print(k, 4); Serial.print(", real=");
           Serial.println(real, 4);
 
-          long raw_pressure = (long)logEntry.baro_data.xlsb << 16 | (long)logEntry.baro_data.msb << 8 | (long)logEntry.baro_data.lsb;
-          Serial.print("Barometer (Raw): "); Serial.println(raw_pressure);*/
+          Serial.print("Barometer (Raw): "); Serial.println(logEntry.baro_data.pressure);*/
           Serial.print("Airspeed (Raw): "); Serial.println(logEntry.airspeed_data.air);
         }
         

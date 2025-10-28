@@ -19,7 +19,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial);
 
-  Serial.println("\nASPD test");
+  Serial.println("\nASPD airspeed test");
   Wire.begin();
 
   if(!myASPD.initASPD()){
@@ -33,7 +33,7 @@ void setup() {
     while (1);
   }
 
-  Serial.println("ASPD init successfully.");
+  Serial.println("ASPD init successfully.\n");
 
 }
 
@@ -47,18 +47,20 @@ void loop() {
     currentLog.timestamp_ms = millis();
 
     float airspeed=(float)currentLog.airsSpeedLog.air;
+    float airspeedPa= (((airspeed)-(.1*16383))*(4/(.8*16383))-2)*6895.0;
+
     Serial.print("Timestamp: ");
     Serial.print(millis());
-    Serial.print(" ms, Airspeed: ");
-    Serial.println(airspeed);
+    Serial.println(" ms");
+    Serial.print("Airspeed: ");
+    Serial.print(sqrt(2*(airspeedPa/1220))*2.237);//assumes air density if 1.22kg/m3
+    Serial.println(" mph\n");
 
     //Serial.println("Trying to open file.");
     File myFile=SD.open(fileName, FILE_WRITE);
     if (myFile) {
-      //Serial.println("Opened file.");
       myFile.write((const uint8_t *)&currentLog, sizeof(currentLog));
       myFile.close();
-      //Serial.println("Wrote data.");
     }
   } else {
     Serial.println("Error getting airspeed reading");
