@@ -46,14 +46,15 @@ void loop() {
     // print sensor readings to serial monitor
     currentLog.timestamp_ms = millis();
 
+    currentLog.airsSpeedLog.air+=45;
     float airspeed=(float)currentLog.airsSpeedLog.air;
-    float airspeedPa= (((airspeed)-(.1*16383))*(4/(.8*16383))-2)*6895.0;
+    float airspeedPa= (((airspeed)-(.1*16383))*(4/(.8*16383))-2)*6895.0; 
 
     Serial.print("Timestamp: ");
     Serial.print(millis());
     Serial.println(" ms");
     Serial.print("Airspeed: ");
-    Serial.print(sqrt(2*(airspeedPa/1220))*2.237);//assumes air density if 1.22kg/m3
+    Serial.print(sqrt(abs(2*(airspeedPa/1220)))*2.237);//assumes air density if 1.22kg/m3
     Serial.println(" mph\n");
 
     //Serial.println("Trying to open file.");
