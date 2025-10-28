@@ -52,7 +52,7 @@ void loop() {
           // Print the data in a human-readable format
           Serial.print("Timestamp: "); Serial.println(logEntry.timestamp_ms);
           
-          float i = (float)logEntry.imu_data.i;
+/*        float i = (float)logEntry.imu_data.i;
           float j = (float)logEntry.imu_data.j;
           float k = (float)logEntry.imu_data.k;
           float real = (float)logEntry.imu_data.real;
@@ -63,7 +63,7 @@ void loop() {
           Serial.println(real, 4);
 
           long raw_pressure = (long)logEntry.baro_data.xlsb << 16 | (long)logEntry.baro_data.msb << 8 | (long)logEntry.baro_data.lsb;
-          Serial.print("Barometer (Raw): "); Serial.println(raw_pressure);
+          Serial.print("Barometer (Raw): "); Serial.println(raw_pressure);*/
           Serial.print("Airspeed (Raw): "); Serial.println(logEntry.airspeed_data.air);
         }
         

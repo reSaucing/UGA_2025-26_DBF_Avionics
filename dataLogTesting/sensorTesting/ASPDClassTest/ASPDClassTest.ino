@@ -7,6 +7,13 @@ ASPD_Data_Collect myASPD;
 const int ASPD_ADDRESS = 0x28;
 const int chipSelect = 10;
 
+char fileName[]="aspdlog.bin";
+
+struct logEntry{
+  uint32_t timestamp_ms;
+  airSpeed airsSpeedLog;
+};
+
 void setup() {
 
   Serial.begin(9600);
@@ -28,33 +35,31 @@ void setup() {
 
   Serial.println("ASPD init successfully.");
 
-  //test opening file on SD
-  File myFile = SD.open(myASPD.fileName, FILE_WRITE);
-  if (!myFile) {
-    Serial.println("Could not open file. Halting");
-    while (1);
-  }
-  myFile.close();
 }
 
 void loop() {
 
-  airSpeed currentAirspeed;
+  logEntry currentLog;
 
-  if(myASPD.getAirspeed(currentAirspeed)){
+  if(myASPD.getAirspeed(currentLog.airsSpeedLog)){
 
     // print sensor readings to serial monitor
-    float airspeed=(float)currentAirspeed.air;
+    currentLog.timestamp_ms = millis();
+
+    float airspeed=(float)currentLog.airsSpeedLog.air;
     Serial.print("Timestamp: ");
     Serial.print(millis());
     Serial.print(" ms, Airspeed: ");
     Serial.println(airspeed);
 
-    // write sensor readings to log file
-    currentAirspeed.timestamp_ms = millis();
-
-    myASPD.writetoSD(currentAirspeed);
-    
+    //Serial.println("Trying to open file.");
+    File myFile=SD.open(fileName, FILE_WRITE);
+    if (myFile) {
+      //Serial.println("Opened file.");
+      myFile.write((const uint8_t *)&currentLog, sizeof(currentLog));
+      myFile.close();
+      //Serial.println("Wrote data.");
+    }
   } else {
     Serial.println("Error getting airspeed reading");
   }
