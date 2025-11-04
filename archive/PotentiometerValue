@@ -1,0 +1,11 @@
+const int Pin=26
+int potVal=0; 
+float angle=0
+void setup() {
+  Serial.begin(9600);  
+}
+void loop () {
+  potVal = analogRead(Pin);
+  angle = (270.0/(pow(2,10)-1.0))*n-135.0;
+  Serial.println(angle);
+}
