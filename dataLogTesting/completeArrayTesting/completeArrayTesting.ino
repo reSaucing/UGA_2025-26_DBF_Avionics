@@ -1,32 +1,32 @@
 #include "ASPD_Data_Collect.h"
-#include "BMP_Data_Collect.h"
+//#include "BMP_Data_Collect.h"
 #include "BNO_Data_Collect.h"
 #include "SD_Data_Write.h"
 
 //initializing sensor object with the following names
 ASPD_Data_Collect myASPD;
-BMP_Data_Collect myBMP;
+//BMP_Data_Collect myBMP;
 BNO_Data_Collect myBNO;
 
 //initializing sd card object with the following name
 SD_Data_Write mySD;
 
-struct POTValues{uint16_t leftPOT, rightPOT;};
+//struct POTValues{uint16_t leftPOT, rightPOT;};
 
 //initializing main logging struct with corresponding sensor structs
 struct masterLog{
   uint32_t timestamp_ms;
   qVectors imuData;
-  BaroPressure baroData;
+//  BaroPressure baroData;
   airSpeed airspeedData;
-  POTValues potData;
+//  POTValues potData;
 };
 
 //file name storage string
 char fileName[16];
 
-const int leftPotPin=20;
-const int rightPotPin=21;
+//const int leftPotPin=20;
+//const int rightPotPin=21;
 
 void setup() {
   Serial.begin(115200);
@@ -45,7 +45,7 @@ void setup() {
   //up to 256 consecutive flights
   for (uint8_t i = 0; i < 255; i++) { 
   //create completely new numbered datalog for seperate flight tracking
-    sprintf(fileName, "flight%03u.bin", i); //flightXXX.bin
+    sprintf(fileName, "%03u.bin", i); //flightXXX.bin
     if (!SD.exists(fileName)) { //if the file does not exist
       Serial.print("Using new log file: ");
       Serial.println(fileName);
@@ -64,10 +64,10 @@ void setup() {
     Serial.println("Process stopped. Not able to initialize accelerometer/gyroscope sensors.");
     while(1);
   }
-  if(!myBMP.initBMP()){
+/*  if(!myBMP.initBMP()){
     Serial.println("Process stopped. Not able to initialize barometric pressure sensor.");
     while(1);
-  }
+  }*/
   if(!myASPD.initASPD()){
     Serial.println("Process stopped. Not able to initialize airspeed sensor.");
     while(1);
@@ -86,11 +86,11 @@ void loop() {
     currentLog.timestamp_ms=millis(); //populates timestamp
     currentLog.imuData=currentVectors;  //populates vector data
 
-    if(!myBMP.getPressure(currentLog.baroData)) currentLog.baroData={};  //populates pressure data. if unable data = 0;
+    //if(!myBMP.getPressure(currentLog.baroData)) currentLog.baroData={};  //populates pressure data. if unable data = 0;
     if(!myASPD.getAirspeed(currentLog.airspeedData)) currentLog.airspeedData={}; //populates airspeed data. if unable data = 0;
 
-    currentLog.potData.leftPOT=analogRead(leftPotPin);
-    currentLog.potData.rightPOT=analogRead(leftPotPin);
+    //currentLog.potData.leftPOT=analogRead(leftPotPin);
+    //currentLog.potData.rightPOT=analogRead(leftPotPin);
 
     //writes the contents of the struct to the datalog in 8 bit intervals (1 byte interval)
     File dataFile = SD.open(fileName, FILE_WRITE);  //opens log file

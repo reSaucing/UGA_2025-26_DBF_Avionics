@@ -35,16 +35,16 @@ void setup() {
 
   bool fileCreated = false; //bool indicating creating of file
   //up to 256 consecutive flights
-  //for (uint8_t i = 0; i < 255; i++) { 
+  for (uint8_t i = 0; i < 255; i++) { 
   //create completely new numbered datalog for seperate flight tracking
-    sprintf(fileName, "flight000.bin");//,i);//"flight%03u.bin", i); //flightXXX.bin
+    sprintf(fileName, "%03u.bin", i);//"flight%03u.bin", i); //flightXXX.bin
     if (!SD.exists(fileName)) { //if the file does not exist
       Serial.print("Using new log file: ");
       Serial.println(fileName);
       fileCreated = true;
-      //break;
+      break;
     }
-  //}
+  }
 /*--------------------------------initializations for debugging------------------------------------*/
   //checks if file was created successfully. if not, stops initialization of system
   if(!fileCreated){
