@@ -13,7 +13,7 @@ SD_Data_Write mySD;
 //initializing main logging struct with corresponding sensor structs
 struct masterLog{
   uint32_t timestamp_ms;
-  qVectors imuData;
+  aVectors imuData;
   airSpeed airspeedData;
 };
 
@@ -66,7 +66,7 @@ void setup() {
 
 void loop() {
   //acts like a buffer to collect temp BNO vector data
-  qVectors currentVectors;  
+  aVectors currentVectors;  
 
   //if getVecotor returns true, populate struct and write data to sdcard
   if(myBNO.getVectors(currentVectors)){
@@ -103,5 +103,5 @@ void loop() {
         Serial.println("Error writing to SD card.");
       }
     }
-  delay(10);  //1 second delay for testing
+  delay(100);  //1 second delay for testing
 }
