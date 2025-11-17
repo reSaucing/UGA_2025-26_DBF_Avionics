@@ -299,7 +299,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "./",
-      "plot": "",
+      "plot": "../../../DBF_GERBER/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
