@@ -10,7 +10,14 @@ class ASPD_Data_Collect{
 
     bool initASPD();
     bool getAirspeed(airSpeed &data);
+    float convToPa(int16_t airSpeed);
 
   private:
+    float Pmax=1;
+    float Pmin=-1;
+    float a=.8;
+    float b=.1;
+    int16_t pDigiCount=16383;
+
 };
 #endif

@@ -28,9 +28,15 @@ void setup() {
 
 /*------------------------------file creation---------------------------------------*/
   //checks if sd was initialized successfully. if not, stops initialization of system
-  if (!mySD.initSD()) {
-    Serial.println("HALT: SD Card initialization failed.");
-    while (1);
+  for(int x=0;x<10;x++){
+    if (!mySD.initSD()&&x<9) {
+      Serial.println("SD Card initialization failed. Trying again attempt ");
+      Serial.print(x);
+    }
+    else if(!mySD.initSD()&& x==9){
+      Serial.println("SD Card initialization failed. Reboot.");
+      while(1);
+    }
   }
 
   bool fileCreated = false; //bool indicating creating of file
@@ -70,38 +76,37 @@ void loop() {
 
   //if getVecotor returns true, populate struct and write data to sdcard
   if(myBNO.getVectors(currentVectors)){
-      masterLog currentLog={};
-        //creates master log instance called current log
-      currentLog.timestamp_ms=millis(); //populates timestamp
-      currentLog.imuData=currentVectors;  //populates vector data
+    masterLog currentLog={};
+    //creates master log instance called current log
+    currentLog.timestamp_ms=millis(); //populates timestamp
+    currentLog.imuData=currentVectors;  //populates vector data
 
     //if(!myBMP.getPressure(currentLog.baroData)) currentLog.baroData={};  //populates pressure data. if unable data = 0;
     if(!myASPD.getAirspeed(currentLog.airspeedData)) currentLog.airspeedData={}; //populates airspeed data. if unable data = 0;
 
-      currentLog.airspeedData.air+=43;
-      float airspeed=(float)currentLog.airspeedData.air;
-      float airspeedPa= ((airspeed-(.1*16383))*((2+2)/(.8*16383))-2)*6895.0;
-      float airspeedMS=sqrt(2*airspeedPa/1.22);
+    // print data to serial monitor
+      Serial.print("Seconds:");
+      Serial.println(millis()/1000);
 
-      // print data to serial monitor
-      Serial.print("Timestamp: ");
-      Serial.print(millis());
-      Serial.print(" ms");
-      Serial.print(" Airspeed Differential: ");
-      Serial.print(airspeedMS);
-      Serial.print(" m/s ");
-      Serial.print("Acceleration X Vector: ");
+      float mps=myASPD.convToPa(currentLog.airspeedData.air);
+
+      Serial.print("m/s:");
+      Serial.println(mps);
+
+      Serial.print("m/s^2:");
       Serial.println(currentVectors.i);
 
-      //writes the contents of the struct to the datalog in 8 bit intervals (1 byte interval)
-      File dataFile = SD.open(fileName, FILE_WRITE);  //opens log file
-      if (dataFile) { //if data is available
-        dataFile.write((const uint8_t *)&currentLog, sizeof(currentLog)); //writing the bytes for the size of the whole struct
-        dataFile.close(); // Close the file prevent corruption
-      } else {
-        // If writing fails, print an error to the serial monitor
-        Serial.println("Error writing to SD card.");
-      }
+      Serial.println();
+
+    //writes the contents of the struct to the datalog in 8 bit intervals (1 byte interval)
+    File dataFile = SD.open(fileName, FILE_WRITE);  //opens log file
+    if (dataFile) { //if data is available
+      dataFile.write((const uint8_t *)&currentLog, sizeof(currentLog)); //writing the bytes for the size of the whole struct
+      dataFile.close(); // Close the file prevent corruption
+    } else {
+      // If writing fails, print an error to the serial monitor
+      Serial.println("Error writing to SD card.");
     }
-  delay(100);  //1 second delay for testing
+  }
+  delay(1);  //1 second delay for testing
 }

@@ -20,8 +20,8 @@ bool BNO_Data_Collect::getVectors(aVectors &data){
       //data.i=sensorOutputData.un.gameRotationVector.i;  //i value gets stored
       //data.i=sensorOutputData.un.linearAcceleration.x;
       data.i=sensorOutputData.un.accelerometer.x;
-      data.i=sensorOutputData.un.accelerometer.y;
-      data.i=sensorOutputData.un.accelerometer.z;
+      data.j=sensorOutputData.un.accelerometer.y;
+      data.k=sensorOutputData.un.accelerometer.z;
       
       //data.j=sensorOutputData.un.gameRotationVector.j;  //j value gets stored
       //data.k=sensorOutputData.un.gameRotationVector.k;  //k value gets stored

@@ -24,3 +24,23 @@ bool ASPD_Data_Collect::getAirspeed(airSpeed &data){
   }
   return false; //returns false if unsuccessful
 }
+float ASPD_Data_Collect::convToPa(int16_t airSpeed){
+
+  float psi=(airSpeed-(b*pDigiCount))*((Pmax-Pmin)/(a*pDigiCount))+Pmin;
+  //Serial.print("PSI: ");
+  //Serial.println(psi);
+
+  float pa = psi* 0.45359237f * 9.80665f / 0.0254f / 0.0254f;
+  //Serial.print("Pa: ");
+  //Serial.println(pa);
+
+  float mPerSec=sqrt((2*pa)/1.196);
+  //Serial.print("m/s: ");
+  //Serial.println(mPerSec);
+
+  //Serial.print("mph: ");
+  //Serial.println(mPerSec*2.23694);
+  //Serial.println();
+
+  return mPerSec;
+}
