@@ -194,7 +194,7 @@ void runLoggingCycle() {
         }
       }
       if (logFile) {
-        logFile.println("ms,alt_ft,aspd,ax,ay,az,lat,lon,p1,p2");
+        logFile.println("ms,alt_ft,aspd,ax,ay,az");
         Serial.println("Recording to: " + String(fileName));
       }
     }
@@ -202,7 +202,7 @@ void runLoggingCycle() {
     // 5. Write to Disk
     if (logFile) {
       logFile.print(now); logFile.print(",");
-      logFile.print(alt, 2); logFile.print(",");
+      logFile.print(rawAltFt, 2); logFile.print(",");
       Serial.print(rawAltFt);
       Serial.println();
       logFile.print(aspd, 2); logFile.print(",");
@@ -213,11 +213,11 @@ void runLoggingCycle() {
       Serial.println();
       Serial.println();
       logFile.print(ay, 3); logFile.print(",");
-      logFile.print(az, 3); logFile.print(",");
-      logFile.print(myGNSS.getLatitude()/10000000.0, 7); logFile.print(",");
-      logFile.print(myGNSS.getLongitude()/10000000.0, 7); logFile.print(",");
-      logFile.print(analogRead(POT1_PIN)); logFile.print(",");
-      logFile.println(analogRead(POT2_PIN));
+      logFile.println(az, 3);
+      //logFile.print(myGNSS.getLatitude()/10000000.0, 7); logFile.print(",");
+      //logFile.print(myGNSS.getLongitude()/10000000.0, 7); logFile.print(",");
+      //logFile.print(analogRead(POT1_PIN)); logFile.print(",");
+      //logFile.println(analogRead(POT2_PIN));
 
       // Flush to SD every 2 seconds
       if (now % 2000 < 50) {
