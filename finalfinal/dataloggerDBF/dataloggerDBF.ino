@@ -10,6 +10,7 @@
 const int POT1_PIN = 14; 
 const int POT2_PIN = 15;
 const int chipSelect = 10;
+const int beeperPin = 3;
 const unsigned long logInterval = 50; // 20 Hz (50ms)
 
 // --- Objects & Global Variables ---
@@ -21,6 +22,11 @@ char fileName[13];
 unsigned long lastLogTime = 0;
 float altTare = 0;
 bool tareSet = false;
+/* Beep codes */
+int SDbeepNumber = 1;
+int BMPbeepNumber = 2;
+int BNObeepNumber = 3;
+int allClearBeepNumber = 4; // to indicate everything is working normally
 
 // --- State Machine ---
 enum SystemState { WAITING, MANAGEMENT_MODE, LOGGING };
@@ -34,12 +40,16 @@ void setup() {
 
   // Initialize SD Card
   if (!SD.begin(chipSelect)) {
-    Serial.println("CRITICAL: SD CARD FAIL");
+    while (true) beep(SDbeepNumber);
   }
 
   // Initialize Sensors
-  if (!bmp.begin_I2C()) Serial.println("BMP390 Fail");
-  if (!bno.begin_I2C()) Serial.println("BNO085 Fail");
+  if (!bmp.begin_I2C()) {
+    while (true) beep(BMPbeepNumber);
+  }
+  if (!bno.begin_I2C()) {
+    while (true) beep(BNObeepNumber);
+  }
   myGNSS.begin(Serial2);
 
   // Sensor Settings
@@ -48,9 +58,14 @@ void setup() {
   bno.enableReport(SH2_LINEAR_ACCELERATION, 50000);
   myGNSS.setNavigationFrequency(20);
 
+  // set mode for beeper GPIO pin
+  pinmode(beeperPin, OUTPUT);
+
   Serial.println("--- SYSTEM BOOT ---");
   Serial.println("Type 'm' within 10s for MANAGEMENT MODE (PuTTY Export)");
   Serial.println("Otherwise, 20Hz Logging starts automatically...");
+  // beeps to indicate normal functioning
+  beep(allClearBeepNumber);
 }
 
 void loop() {
@@ -234,4 +249,18 @@ float convToPa(uint16_t airSpeed){
   float mPerSec=sqrt((2*pa)/1.196);
 
   return mPerSec;
+}
+
+/**
+ * Function to make the beeper beep a given number of times. Each beep will be 0.25 seconds, and there will be
+ * 0.25 second delay between beeps. There will be a 0.5 second delay after the last beep.
+ */
+void beep(int beeps) {
+  for (int i = 0; i < beeps; i++) {
+    digitalWrite(beeperPin, HIGH);
+    delay(250);
+    digitalWrite(beeperPin, LOW);
+    delay(250);
+  }
+  delay(250);
 }
